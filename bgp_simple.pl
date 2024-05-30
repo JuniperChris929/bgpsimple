@@ -4,10 +4,12 @@
 # it under the terms of the GNU General Public License version 3 as
 # published by the Free Software Foundation.
 #
-# The program is hosted at http://bgpsimple.googlecode.com
 #
-# Please mail any bugs, suggestions and feature requests to
-# the.einval (at) googlemail.com
+# Originally from: the.einval (at) googlemail.com
+# Modified by Christian Scholz <chs@ip4.de>
+# I needed this for my networking exam - now I'm reviving this "gem" ;)
+
+
 
 use strict;
 use warnings;
@@ -16,8 +18,8 @@ use Getopt::Long;
 use Net::BGP;
 use Net::BGP::Process;
 
-my $version = "v0.12";
-my $version_date = "22-Jan-2011";
+my $version = "v0.13";
+my $version_date = "30-May-2024";
 
 my $help = <<EOF;
 
@@ -30,6 +32,7 @@ bgp_simple.pl:
 	       	-myip   	IP address	# (mandatory) our IP address to source the sesion from
 	     	-peerip 	IP address	# (mandatory) peer IP address
 		-peeras		ASNUMBER	# (mandatory) peer AS number
+                [-hideoutput]                 	# (optional) completely hides ANY output to make this thing faster (printing all routes to console / ssh is overkill in most scenarios and slows this thing down)
 		[-holdtime]	Seconds		# (optional) BGP hold time duration in seconds (default 60s)
 		[-keepalive]	Seconds		# (optional) BGP KeepAlive timer duration in seconds (default 20s)
 		[-nolisten]			# (optional) dont listen at \$myip, tcp/179
@@ -120,6 +123,7 @@ my %regex_filter;
 my $holdtime = 60;
 my $keepalive = 20;
 my $nolisten = 0;
+my $hide_output = '';
 
 GetOptions( 	'help' 		=> sub{ sub_debug("m","$help"); exit; },   
 		'm=s' 		=> \$prefix_limit,
@@ -136,7 +140,8 @@ GetOptions( 	'help' 		=> sub{ sub_debug("m","$help"); exit; },
 		'peerip=s' 	=> \$peerip,
 		'holdtime=s'	=> \$holdtime,
 		'keepalive=s'	=> \$keepalive,
-		'nolisten'	=> \$nolisten
+		'nolisten'	=> \$nolisten,
+		'hide_output' => \$hide_output
  );
 
 	
@@ -250,7 +255,8 @@ sub sub_debug
 	my $level = shift(@_);	
 	my $msg   = shift(@_);	
 
-	print $msg if ($level eq "m");				# mandatory
+unless ($hide_output) {
+    print $msg if ($level eq "m");				# mandatory
 	print $msg if ($level eq "e");				# error
 	print $msg if ($level eq "u");				# UPDATE
 	print $msg if ( ($level eq "i") && ($verbose >= 1) );	# informational
@@ -263,6 +269,8 @@ sub sub_debug
 		print OUTPUT "$msg";	
 		close (OUTPUT);
 	}
+}
+
 }
 
 sub sub_checkip
