@@ -32,7 +32,7 @@ bgp_simple.pl:
 	       	-myip   	IP address	# (mandatory) our IP address to source the sesion from
 	     	-peerip 	IP address	# (mandatory) peer IP address
 		-peeras		ASNUMBER	# (mandatory) peer AS number
-                [-hideoutput]                 	# (optional) completely hides ANY output to make this thing faster (printing all routes to console / ssh is overkill in most scenarios and slows this thing down)
+                [-hide_output]                 	# (optional) completely hides ANY output to make this thing faster (printing all routes to console / ssh is overkill in most scenarios and slows this thing down)
 		[-holdtime]	Seconds		# (optional) BGP hold time duration in seconds (default 60s)
 		[-keepalive]	Seconds		# (optional) BGP KeepAlive timer duration in seconds (default 20s)
 		[-nolisten]			# (optional) dont listen at \$myip, tcp/179
