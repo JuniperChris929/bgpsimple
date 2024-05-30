@@ -1,3 +1,12 @@
+v0.13 - 30-May-2024
+===================
+
+ - Improvement: hide_output flag added
+
+   This allows the script to load routes WAY faster. 
+   Instead of 20routes / second (console output) it can now load 20.000 
+   routes per second (assuming a server with enough horsepower) ;)
+
 v0.12 - 22-Jan-2011
 ===================
 
